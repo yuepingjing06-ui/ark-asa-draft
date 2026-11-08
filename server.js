@@ -9,6 +9,7 @@ function admin(req){const token=(req.headers.cookie||'').match(/(?:^|;\s*)ark_se
 function sameOrigin(req){const o=req.headers.origin;return !o||o==='https://'+req.headers.host||o==='http://'+req.headers.host}
 http.createServer(async(req,res)=>{try{const p=new URL(req.url,'http://localhost').pathname;
 if(req.method==='GET'&&p==='/'){res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'"});return res.end(fs.readFileSync('index.html'))}
+if(req.method==='GET'&&p==='/style.css'){res.writeHead(200,{'Content-Type':'text/css; charset=utf-8','Cache-Control':'no-cache'});return res.end(fs.readFileSync('style.css'))}
 if(req.method==='GET'&&p==='/app.js'){res.writeHead(200,{'Content-Type':'application/javascript; charset=utf-8'});return res.end(fs.readFileSync('app.js'))}
 if(req.method==='GET'&&p==='/api/creatures')return json(res,200,{creatures:await db('asa_creatures','GET',undefined,'?select=*&order=id.asc&limit=500'),budget:50});
 if(req.method==='GET'&&p==='/api/me')return json(res,200,{admin:admin(req)});
